@@ -4,21 +4,27 @@
 
 <p>Prediction for Got</p>
 <ul>
-    <li>Temperature: 38,5 - 39,7 C</li>
-    <li>Heart Rate: 70 - 80 x/minute</li>
     <li>Breath: 26 - 54 x/minute</li>
+    <li>Heart Rate: 70 - 80 x/minute</li>
+    <li>Temperature: 38,5 - 39,7 C</li>
 </ul>
 
 <p>Prediction for Sheep</p>
 <ul>
-    <li>Temperature: 38,5 - 39 C</li>
-    <li>Heart Rate: 70 - 80 x/minute</li>
     <li>Breath: 26 - 32 x/minute</li>
+    <li>Heart Rate: 70 - 80 x/minute</li>
+    <li>Temperature: 38,5 - 39 C</li>
 </ul>
 
 <p>Calibration Sensor</p>
 <ul>
-    <li>Temperature: <a href="">Code</a></li>
-    <li>Heart Rate: <a href="">Code</a>/li>
-    <li>Breath: <a href="">Code</a></li>
+  <li>Breath Sensor: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Test-Sensor/tree/main/BreathSensor">View</a></li>
+  <li>Heart Rate Sensor: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Test-Sensor/tree/main/HeartRateSensor">View</a></li>
+  <li>Temperature Sensor: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Test-Sensor/tree/main/TemperatureSensor">View</a></li>
+</ul>
+
+<p>Full Code</p>
+<ul>
+  <li>CodeMQTT: <a href="">View</a></li>
+  <li>FullCode: <a href="">View</a></li>
 </ul>
