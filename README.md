@@ -18,13 +18,13 @@
 
 <p>Calibration Sensor</p>
 <ul>
-  <li>Breath Sensor: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Test-Sensor/tree/main/BreathSensor">View</a></li>
-  <li>Heart Rate Sensor: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Test-Sensor/tree/main/HeartRateSensor">View</a></li>
-  <li>Temperature Sensor: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Test-Sensor/tree/main/TemperatureSensor">View</a></li>
+  <li>Breath Sensor: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Farm-Prediction-Goat-and-Sheep/tree/main/BreathSensor">View</a></li>
+  <li>Heart Rate Sensor: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Farm-Prediction-Goat-and-Sheep/tree/main/HeartRateSensor">View</a></li>
+  <li>Temperature Sensor: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Farm-Prediction-Goat-and-Sheep/tree/main/TemperatureSensor">View</a></li>
 </ul>
 
 <p>Full Code</p>
 <ul>
-  <li>CodeMQTT: <a href="">View</a></li>
-  <li>FullCode: <a href="">View</a></li>
+  <li>CodeMQTT: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Farm-Prediction-Goat-and-Sheep/tree/main/CodeMQTT">View</a></li>
+  <li>FullCode: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Farm-Prediction-Goat-and-Sheep/tree/main/FullCode">View</a></li>
 </ul>
