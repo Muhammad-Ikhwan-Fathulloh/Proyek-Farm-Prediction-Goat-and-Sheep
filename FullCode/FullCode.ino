@@ -61,7 +61,7 @@ void connect() {
 
   Serial.println("\nconnected!");
 
-  client.subscribe("hello");
+  client.subscribe("158928/farm/#");
 }
 
 void messageReceived(String &topic, String &payload) {
