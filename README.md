@@ -26,5 +26,7 @@
 <p>Full Code</p>
 <ul>
   <li>CodeMQTT: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Farm-Prediction-Goat-and-Sheep/tree/main/CodeMQTT">View</a></li>
-  <li>FullCode: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Farm-Prediction-Goat-and-Sheep/tree/main/FullCode">View</a></li>
+  <li>CodePrediction: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Farm-Prediction-Goat-and-Sheep/tree/main/CodePrediction">View</a></li>
+  <li>FullCode: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Farm-Prediction-Goat-and-Sheep/tree/main/FullCode/FullCode.ino">View</a></li>
+  <li>FullCodePrediction: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh/Proyek-Farm-Prediction-Goat-and-Sheep/tree/main/FullCode/FullCodePrediction.ino">View</a></li>
 </ul>
