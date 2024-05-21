@@ -1,4 +1,15 @@
+//Check Board ESP
+#ifdef ESP8266
+#include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
+#elif defined(ESP32)
 #include <WiFi.h>
+#include <ESPmDNS.h>
+#else
+#error "Board not found"
+#endif
+
+// Import MQTT
 #include <MQTT.h>
 
 //Device Code
