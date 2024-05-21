@@ -12,8 +12,13 @@
 // Import MQTT
 #include <MQTT.h>
 
+// Import LCD 16x2
+#include <LiquidCrystal_I2C.h>//I2C LCD
+LiquidCrystal_I2C lcd(0x27,16,2);//SDA dan SDL
+
 //Device Code
 String deviceCode = "Device01";
+// String deviceCode = "Device02";
 
 //Breath Sensor
 #define AMBANG_BATAS_DETEKSI 100 // Nilai ambang batas untuk mendeteksi suara
@@ -102,6 +107,16 @@ void setup() {
   client.begin("public.cloud.shiftr.io", net);
   client.onMessage(messageReceived);
 
+  //LCD Display
+  lcd.begin();
+  lcd.home();
+  //lcd.init();                      
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("Farm System");
+  lcd.setCursor(0,1);
+  lcd.print("Koneksikan Alat");
+
   connect();
 }
 
@@ -149,12 +164,19 @@ void breathSensor(){
     float soundPerMinute = (float)soundCount / ((float)(currentMillis - lastMinute) / 60000.0);
     Serial.print("Jumlah suara per menit: ");
     Serial.println(soundPerMinute);
-    
+    breathRate = soundPerMinute;
     // Reset jumlah suara dan waktu terakhir perhitungan
     soundCount = 0;
     lastMinute = currentMillis;
     delay(5000);
   }
+
+  //LCD Display
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Pernapasan");
+  lcd.setCursor(0,1);
+  lcd.print(breathRate + "per Menit");
 
   client.publish("158928/farm/breath_sensor", String(soundCount));
   
@@ -191,6 +213,15 @@ void HeartRateSensor(){
   Serial.print(beatsPerMinute);
   Serial.print(", Avg BPM=");
   Serial.print(beatAvg);
+
+  heartRate = beatsPerMinute;
+
+  //LCD Display
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Detak Jantung");
+  lcd.setCursor(0,1);
+  lcd.print(beatsPerMinute + "per Menit");
   
   client.publish("158928/farm/heart_sensor", String(beatsPerMinute));
   
@@ -204,6 +235,15 @@ void TemperatureSensor(){
   sensors.requestTemperatures(); 
   float temperatureC = sensors.getTempCByIndex(0);
   float temperatureF = sensors.getTempFByIndex(0);
+  temperature = temperatureC;
+
+  //LCD Display
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Suhu");
+  lcd.setCursor(0,1);
+  lcd.print(temperature + "ºC");
+  
   client.publish("158928/farm/temperature_sensor", String(temperatureC));
   Serial.print(temperatureC);
   Serial.println("ºC");
