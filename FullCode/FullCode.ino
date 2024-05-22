@@ -176,7 +176,7 @@ void breathSensor(){
   lcd.setCursor(0,0);
   lcd.print("Pernapasan");
   lcd.setCursor(0,1);
-  lcd.print(breathRate + "per Menit");
+  lcd.print(String(breathRate) + "per Menit");
 
   client.publish("158928/farm/breath_sensor", String(soundCount));
   
@@ -221,7 +221,7 @@ void HeartRateSensor(){
   lcd.setCursor(0,0);
   lcd.print("Detak Jantung");
   lcd.setCursor(0,1);
-  lcd.print(beatsPerMinute + "per Menit");
+  lcd.print(String(beatsPerMinute) + "per Menit");
   
   client.publish("158928/farm/heart_sensor", String(beatsPerMinute));
   
@@ -242,7 +242,7 @@ void TemperatureSensor(){
   lcd.setCursor(0,0);
   lcd.print("Suhu");
   lcd.setCursor(0,1);
-  lcd.print(temperature + "ºC");
+  lcd.print(String(temperature) + "ºC");
   
   client.publish("158928/farm/temperature_sensor", String(temperatureC));
   Serial.print(temperatureC);
