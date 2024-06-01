@@ -45,7 +45,7 @@ int beatAvg;
 #include <DallasTemperature.h>
 
 // GPIO where the DS18B20 is connected to
-const int oneWireBus = 4;     
+const int oneWireBus = 2;     
 
 // Setup a oneWire instance to communicate with any OneWire devices
 OneWire oneWire(oneWireBus);
@@ -59,8 +59,6 @@ const char pass[] = "pass";
 
 WiFiClient net;
 MQTTClient client;
-
-unsigned long lastMillis = 0;
 
 //Parameter Prediction
 // Define thresholds for Goat
@@ -83,6 +81,20 @@ const float sheepTempMax = 39.0;
 int breathRate = 0; // Replace with actual breath rate calculation
 int heartRate = 0; // Replace with actual heart rate calculation
 float temperature = 0; // Replace with actual temperature calculation
+
+// Millis
+unsigned long lastPublishMillis = 0;
+unsigned long lastBreathMillis = 0;
+unsigned long lastHeartRateMillis = 0;
+unsigned long lastTemperatureMillis = 0;
+unsigned long lastPredictionMillis = 0;
+
+// Interval dalam milidetik
+const unsigned long publishInterval = 1000;
+const unsigned long breathInterval = 5000;
+const unsigned long heartRateInterval = 3000;
+const unsigned long temperatureInterval = 4000;
+const unsigned long predictionInterval = 6000;
 
 void connect() {
   Serial.print("checking wifi...");
@@ -151,13 +163,35 @@ void loop() {
     connect();
   }
 
-  // publish a message roughly every second.
-  if (millis() - lastMillis > 1000) {
-    lastMillis = millis();
+  unsigned long currentMillis = millis();
+
+  // Publish device code setiap 1000 ms
+  if (currentMillis - lastPublishMillis > publishInterval) {
+    lastPublishMillis = currentMillis;
     client.publish("158928/farm/device_code", String(deviceCode));
+  }
+
+  // Jalankan breathSensor setiap 5000 ms
+  if (currentMillis - lastBreathMillis > breathInterval) {
+    lastBreathMillis = currentMillis;
     breathSensor();
+  }
+
+  // Jalankan HeartRateSensor setiap 3000 ms
+  if (currentMillis - lastHeartRateMillis > heartRateInterval) {
+    lastHeartRateMillis = currentMillis;
     HeartRateSensor();
+  }
+
+  // Jalankan TemperatureSensor setiap 4000 ms
+  if (currentMillis - lastTemperatureMillis > temperatureInterval) {
+    lastTemperatureMillis = currentMillis;
     TemperatureSensor();
+  }
+
+  // Jalankan PredictionHealth setiap 6000 ms
+  if (currentMillis - lastPredictionMillis > predictionInterval) {
+    lastPredictionMillis = currentMillis;
     PredictionHealth();
   }
 }
