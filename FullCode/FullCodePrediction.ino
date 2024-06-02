@@ -192,6 +192,10 @@ void loop() {
   // Jalankan PredictionHealth setiap 6000 ms
   if (currentMillis - lastPredictionMillis > predictionInterval) {
     lastPredictionMillis = currentMillis;
+    client.publish("158928/farm/breath_sensor", String(breathRate));
+    client.publish("158928/farm/heart_sensor", String(heartRate));
+    client.publish("158928/farm/temperature_sensor", String(temperature));
+
     PredictionHealth();
   }
 }
@@ -234,8 +238,6 @@ void breathSensor(){
   lcd.setCursor(0,1);
   lcd.print(String(breathRate) + "per Menit");
 
-  client.publish("158928/farm/breath_sensor", String(breathRate));
-  
   delay(50);
 }
 
@@ -278,9 +280,7 @@ void HeartRateSensor(){
   lcd.print("Detak Jantung");
   lcd.setCursor(0,1);
   lcd.print(String(heartRate) + "per Menit");
-  
-  client.publish("158928/farm/heart_sensor", String(heartRate));
-  
+    
   if (irValue < 50000)
     Serial.print(" No finger?");
 
@@ -300,7 +300,6 @@ void TemperatureSensor(){
   lcd.setCursor(0,1);
   lcd.print(String(temperature) + "ºC");
 
-  client.publish("158928/farm/temperature_sensor", String(temperature));
   Serial.print(temperatureC);
   Serial.println("ºC");
   Serial.print(temperatureF);
