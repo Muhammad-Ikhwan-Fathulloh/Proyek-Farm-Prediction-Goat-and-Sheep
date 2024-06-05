@@ -9,14 +9,19 @@
 #error "Board not found"
 #endif
 
+// Import MQTT
+#include <MQTT.h>
+
 // Device Code
 String deviceCode = "Device01";
+// String deviceCode = "Device02";
 
 // Wifi Configuration
 const char ssid[] = "hgp";
 const char pass[] = "123456788";
 
 WiFiClient net;
+MQTTClient client;
 
 // Define thresholds for Goat
 const int goatBreathMin = 26;
@@ -85,8 +90,9 @@ const unsigned long breathSensorDuration = 60000; // 1 minute
 // Global variables to store sensor values
 float globalTemperature = 0;
 int globalHeartRate = 0;
-int globalBreathRate = 0;
+int globalBreathRate = 0; // Inisialisasi globalBreathRate
 unsigned long soundCount = 0; // Menyimpan jumlah suara yang terdeteksi
+unsigned long lastMinute = 0; // Menyimpan waktu terakhir perhitungan
 
 void connect() {
   Serial.print("checking wifi...");
@@ -95,7 +101,15 @@ void connect() {
     delay(1000);
   }
 
+  Serial.print("\nconnecting...");
+  while (!client.connect("arduino", "public", "public")) {
+    Serial.print(".");
+    delay(1000);
+  }
+
   Serial.println("\nconnected!");
+
+  client.subscribe("158928/farm/#");
 }
 
 void setup() {
@@ -109,6 +123,7 @@ void setup() {
     Serial.println("MAX30105 was not found. Please check wiring/power.");
     while (1);
   }
+
   Serial.println("Place your index finger on the sensor with steady pressure.");
   particleSensor.setup();
   particleSensor.setPulseAmplitudeRed(0x0A); // Turn Red LED to low to indicate sensor is running
@@ -119,6 +134,8 @@ void setup() {
 
   // Start WiFi
   WiFi.begin(ssid, pass);
+  client.begin("public.cloud.shiftr.io", net);
+  client.onMessage(messageReceived);
   connect();
 
   stateStartTime = millis();
@@ -148,6 +165,9 @@ void loop() {
         globalTemperature = sensors.getTempCByIndex(0); // Save the temperature
         stateStartTime = currentTime;
         currentState = BREATH_SENSOR;
+        // Reset sound count and last minute for breath sensor
+        soundCount = 0;
+        lastMinute = millis();
       }
       break;
 
@@ -155,8 +175,8 @@ void loop() {
       Serial.println("Running breath sensor...");
       napas();
       if (currentTime - stateStartTime >= breathSensorDuration) {
-        // After running breath sensor, store the global breath rate (assuming soundCount is updated inside napas function)
-        globalBreathRate = soundCount;
+        // After running breath sensor, store the global breath rate
+        globalBreathRate = (float)soundCount / ((float)(currentTime - lastMinute) / 60000.0);
         stateStartTime = currentTime;
 
         // Print all sensor values
@@ -189,6 +209,7 @@ void suhu() {
   Serial.println("ºC");
   Serial.print(temperatureF);
   Serial.println("ºF");
+  delay(5000);
 }
 
 void max() {
@@ -227,7 +248,6 @@ void max() {
 }
 
 void napas() {
-  static unsigned long lastMinute = 0; // variabel untuk menyimpan waktu terakhir perhitungan
   static int ambangBatas = AMBANG_BATAS_TIDAK_DETEKSI; // Nilai ambang batas sensor default
 
   unsigned long currentMillis = millis(); // mendapatkan waktu saat ini
@@ -245,14 +265,16 @@ void napas() {
 
   // Menghitung jumlah suara per menit
   if (currentMillis - lastMinute >= 60000) { // 60000 milliseconds = 1 menit
-    float soundPerMinute = (float)soundCount / ((float)(currentMillis - lastMinute) / 60000.0);
+    globalBreathRate = (float)soundCount / ((float)(currentMillis - lastMinute) / 60000.0);
     Serial.print("Jumlah suara per menit: ");
-    Serial.println(soundPerMinute);
+    Serial.println(globalBreathRate);
 
     // Reset jumlah suara dan waktu terakhir perhitungan
     soundCount = 0;
     lastMinute = currentMillis;
+    delay(5000);
   }
+  delay(50);
 }
 
 void PredictionHealth() {
@@ -281,4 +303,10 @@ void PredictionHealth() {
   }
 
   Serial.println(messageSheep);
+  
+  client.publish("158928/farm/device_code", String(deviceCode));
+  client.publish("158928/farm/breath_sensor", String(globalBreathRate));
+  client.publish("158928/farm/heart_sensor", String(globalHeartRate));
+  client.publish("158928/farm/temperature_sensor", String(globalTemperature));
+  client.publish("158928/farm/prediction", String(messageSheep));
 }
