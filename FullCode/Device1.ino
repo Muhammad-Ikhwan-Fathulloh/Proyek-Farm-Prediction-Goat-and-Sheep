@@ -12,6 +12,10 @@
 // Import MQTT
 #include <MQTT.h>
 
+// Import LCD 16x2
+#include <LiquidCrystal_I2C.h>//I2C LCD
+LiquidCrystal_I2C lcd(0x27,16,2);//SDA dan SDL
+
 // Device Code
 String deviceCode = "Device01";
 
@@ -51,6 +55,10 @@ const unsigned long breathInterval = 5000;
 const unsigned long heartRateInterval = 3000;
 const unsigned long temperatureInterval = 4000;
 const unsigned long predictionInterval = 6000;
+
+// Variabel untuk melacak waktu
+unsigned long previousMillis = 0;
+const long interval = 1000; // Interval pembaruan dalam milidetik (1000 ms = 1 detik)
 
 // ds18b20
 #include <OneWire.h>
@@ -140,6 +148,14 @@ void setup() {
   client.begin("public.cloud.shiftr.io", net);
   client.onMessage(messageReceived);
   connect();
+
+  //LCD Display
+  lcd.init();                      
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("Farm System");
+  lcd.setCursor(0,1);
+  lcd.print("Koneksikan Alat");
 
   stateStartTime = millis();
 }
@@ -313,4 +329,26 @@ void PredictionHealth() {
   Serial.println(messageSheep);
 
   client.publish("158928/farm/prediction", String(messageSheep));
+
+  // Periksa apakah interval telah berlalu
+  if (currentMillis - previousMillis >= interval) {
+    // Simpan waktu pembaruan terakhir
+    previousMillis = currentMillis;
+
+    // Perbarui tampilan LCD
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Jantung: " + String(globalHeartRate) + "bpm");
+    lcd.setCursor(0, 1);
+    lcd.print("Nafas: " + String(globalBreathRate) + "sec");
+
+    // Tunggu interval berikutnya
+    delay(interval);
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Suhu: " + String(globalTemperature) + "C");
+    lcd.setCursor(0, 1);
+    lcd.print(String(messageSheep));
+  }
 }
