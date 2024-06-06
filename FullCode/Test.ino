@@ -112,6 +112,10 @@ void connect() {
   client.subscribe("158928/farm/#");
 }
 
+void messageReceived(String &topic, String &payload) {
+  Serial.println(topic + ": " + payload);
+}
+
 void setup() {
   Serial.begin(115200);
   Serial.println("Initializing...");
@@ -303,7 +307,7 @@ void PredictionHealth() {
   }
 
   Serial.println(messageSheep);
-  
+
   client.publish("158928/farm/device_code", String(deviceCode));
   client.publish("158928/farm/breath_sensor", String(globalBreathRate));
   client.publish("158928/farm/heart_sensor", String(globalHeartRate));
