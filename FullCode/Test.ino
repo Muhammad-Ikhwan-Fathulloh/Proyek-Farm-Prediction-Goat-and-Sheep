@@ -149,6 +149,7 @@ void loop() {
   unsigned long currentTime = millis();
   Serial.print("Current State: ");
   Serial.println(currentState);
+  client.publish("158928/farm/device_code", String(deviceCode));
 
   switch (currentState) {
     case MAX_SENSOR:
@@ -190,6 +191,10 @@ void loop() {
         Serial.println(globalTemperature);
         Serial.print("Breath Rate: ");
         Serial.println(globalBreathRate);
+        
+        client.publish("158928/farm/breath_sensor", String(globalBreathRate));
+        client.publish("158928/farm/heart_sensor", String(globalHeartRate));
+        client.publish("158928/farm/temperature_sensor", String(globalTemperature));
 
         // Perform health prediction
         PredictionHealth();
@@ -308,9 +313,5 @@ void PredictionHealth() {
 
   Serial.println(messageSheep);
 
-  client.publish("158928/farm/device_code", String(deviceCode));
-  client.publish("158928/farm/breath_sensor", String(globalBreathRate));
-  client.publish("158928/farm/heart_sensor", String(globalHeartRate));
-  client.publish("158928/farm/temperature_sensor", String(globalTemperature));
   client.publish("158928/farm/prediction", String(messageSheep));
 }
