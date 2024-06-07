@@ -226,9 +226,9 @@ void loop() {
   }
 
   // Periksa apakah interval telah berlalu
-  if (currentMillis - previousMillis >= interval) {
+  if (currentTime - previousMillis >= interval) {
     // Simpan waktu pembaruan terakhir
-    previousMillis = currentMillis;
+    previousMillis = currentTime;
 
     // Perbarui tampilan LCD
     lcd.clear();
