@@ -98,6 +98,7 @@ const unsigned long breathSensorDuration = 60000; // 1 minute
 float globalTemperature = 0;
 int globalHeartRate = 0;
 int globalBreathRate = 0; // Inisialisasi globalBreathRate
+String globalMessage = ""; // Inisialisasi globalMessage
 unsigned long soundCount = 0; // Menyimpan jumlah suara yang terdeteksi
 unsigned long lastMinute = 0; // Menyimpan waktu terakhir perhitungan
 
@@ -223,6 +224,28 @@ void loop() {
       }
       break;
   }
+
+  // Periksa apakah interval telah berlalu
+  if (currentMillis - previousMillis >= interval) {
+    // Simpan waktu pembaruan terakhir
+    previousMillis = currentMillis;
+
+    // Perbarui tampilan LCD
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Jantung: " + String(globalHeartRate) + "bpm");
+    lcd.setCursor(0, 1);
+    lcd.print("Nafas: " + String(globalBreathRate) + "sec");
+
+    // Tunggu interval berikutnya
+    delay(interval);
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Suhu: " + String(globalTemperature) + "C");
+    lcd.setCursor(0, 1);
+    lcd.print(String(globalMessage));
+  }
 }
 
 void suhu() {
@@ -326,29 +349,9 @@ void PredictionHealth() {
     messageSheep = "Domba dalam kondisi tidak sehat";
   }
 
+  globalMessage = messageSheep;
+
   Serial.println(messageSheep);
 
   client.publish("158929/farm/prediction", String(messageSheep));
-
-  // Periksa apakah interval telah berlalu
-  if (currentMillis - previousMillis >= interval) {
-    // Simpan waktu pembaruan terakhir
-    previousMillis = currentMillis;
-
-    // Perbarui tampilan LCD
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Jantung: " + String(globalHeartRate) + "bpm");
-    lcd.setCursor(0, 1);
-    lcd.print("Nafas: " + String(globalBreathRate) + "sec");
-
-    // Tunggu interval berikutnya
-    delay(interval);
-
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Suhu: " + String(globalTemperature) + "C");
-    lcd.setCursor(0, 1);
-    lcd.print(String(messageSheep));
-  }
 }
